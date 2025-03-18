@@ -326,7 +326,9 @@ const updateParams = res => {
         }
     });
     await checkResErr(accRes);
-    const accInfo = (await accRes.json())?.find(item => item.capabilities.includes('chat')); //const accInfo = (await accRes.json())?.[0];\nif (!accInfo || accInfo.error) {\n    throw Error(`Couldn't get account info: "${accInfo?.error?.message || accRes.statusText}"`);\n}\nif (!accInfo?.uuid) {\n    throw Error('Invalid account id');\n}
+    const accInfo = (await accRes.json())
+        ?.filter(item => item.capabilities.includes('chat'))
+        .sort((a, b) => b.capabilities.length - a.capabilities.length)[0];
     setTitle('ok');
     updateParams(accRes);
     uuidOrg = accInfo?.uuid;
